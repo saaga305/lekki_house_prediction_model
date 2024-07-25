@@ -1,0 +1,79 @@
+Certainly! Here's an example of a simple website for house price predictions using HTML, CSS, JavaScript, and Bootstrap:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>House Price Prediction</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .container {
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body background="fanart-g674c8ef27_1920.png">
+  
+  <div class="container">
+    <h1 class="text-center">House Price Prediction</h1>
+    <form id="prediction-form">
+      <div class="form-group">
+        <label for="bedrooms">Number of Bedrooms:</label>
+        <input type="number" class="form-control" id="bedrooms" required>
+      </div>
+      <div class="form-group">
+        <label for="parking-space">Parking Space:</label>
+        <input type="number" class="form-control" id="parking-space" required>
+      </div>
+      <div class="form-group">
+        <label for="house-type">House Type:</label>
+        <select class="form-control" id="house-type" required>
+          <option value="">-- Select House Type --</option>
+          <option value="Detached Duplex">Detached Duplex</option>
+          <option value="Semi Detached Duplex">Semi Detached Duplex</option>
+          <option value="Terraced Duplex">Terraced Duplex</option>
+          <option value="Block of Flats">Block of Flats</option>
+          <option value="Detached Bungalow">Detached Bungalow</option>
+          <option value="Semi Detached Bungalow">Semi Detached Bungalow</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Predict Price</button>
+    </form>
+    <div id="prediction-result" class="mt-4" style="display: none;">
+      <h4>Predicted Price:</h4>
+      <p id="predicted-price"></p>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Handle form submission
+      $('#prediction-form').submit(function(event) {
+        event.preventDefault();
+  
+        // Get the input values
+        var bedrooms = $('#bedrooms').val();
+        var parkingSpace = $('#parking-space').val();
+        var houseType = $('#house-type').val();
+  
+        // Make the POST request
+        $.post('http://127.0.0.1:5000/predict_home_price', {
+          'bedrooms': bedrooms,
+          'parking_space': parkingSpace,
+          'house_type': houseType
+        })
+        .done(function(response) {
+          // Display the predicted price
+          $('#predicted-price').text(response.estimated_price.prediction);
+          $('#prediction-result').show();
+        })
+        .fail(function(error) {
+          // Handle the error if the prediction request fails
+          console.log(error);
+        });
+      });
+    });
+  </script>
+  
+</body>
+</html>
